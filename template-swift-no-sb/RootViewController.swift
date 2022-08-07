@@ -24,7 +24,7 @@ class RootViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .systemGray
+        self.view.backgroundColor = .systemMint
         
         let v1 = UIView()
         v1.translatesAutoresizingMaskIntoConstraints=false
@@ -48,20 +48,35 @@ class RootViewController: UIViewController {
         
         let views = [v1,v2,v3,v4]
         var guides = [UILayoutGuide]()
+        
         // add the guides to the view
         for _ in views.dropLast() {
             let g = UILayoutGuide()
             self.view.addLayoutGuide(g)
-            guides.append( g)
-            
+            guides.append( g)            
         }
         
-        let anc = self.view.leadingAnchor
+        let viewsLeading = self.view.leadingAnchor
         // left anchor and width are arbitrary
+        for g in guides {
+            g.leadingAnchor.constraint(equalTo: viewsLeading).isActive=true
+            g.widthAnchor.constraint(equalToConstant: 10).isActive=true
+        }
         
+        // the stripes bottom is guides'top
+        for (v,g) in zip(views.dropLast(), guides){
+            v.bottomAnchor.constraint(equalTo: g.topAnchor).isActive=true
+        }
         
-        
-        
+        //the stripes top is guides bottom
+        for (v,g) in zip(views.dropFirst(), guides) {
+            v.topAnchor.constraint(equalTo: g.bottomAnchor).isActive=true
+        }
+        // all guides have eq height
+        let h = guides[0].heightAnchor
+        for g in guides.dropFirst() {
+            g.heightAnchor.constraint(equalTo: h).isActive=true
+        }
         
         
         
